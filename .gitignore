@@ -1,0 +1,20 @@
+# CMake
+
+cmake_install.cmake
+CMakeFiles/
+CMakeCache.txt
+
+Makefile
+
+
+# Objects
+
+*.o
+*.so
+*.a
+*.la
+
+
+# Temporaries
+
+*.swp
