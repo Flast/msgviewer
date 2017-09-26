@@ -426,7 +426,7 @@ void construct_model(QTreeView* view, QByteArray const data)
         }
         else /*if (byte <= 0xffu)*/
         {
-            auto value = signed(byte);
+            auto value = static_cast<std::int8_t>(byte);
             insert(QStringLiteral("negative fixint: %1").arg(value));
         }
 
