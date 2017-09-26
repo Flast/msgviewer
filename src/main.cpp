@@ -153,6 +153,9 @@ void construct_model(QTreeView* view, QByteArray const data)
 {
     auto model = std::make_unique<QStandardItemModel>();
 
+    // To avoid memory leak on quitting.
+    model->setParent(QCoreApplication::instance());
+
     std::stack<std::pair<QStandardItem*, unsigned>> ctx;
     ctx.push(std::make_pair(model->invisibleRootItem(), 0));
 
@@ -445,9 +448,6 @@ void construct_model(QTreeView* view, QByteArray const data)
     }
 
     // TODO: indicate insufficients
-
-    // To avoid memory leak on quitting.
-    model->setParent(view);
 
     view->setModel(model.release());
 }
