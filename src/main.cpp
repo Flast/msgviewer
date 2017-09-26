@@ -159,15 +159,20 @@ void construct_model(QTreeView* view, QByteArray const data)
     std::stack<std::pair<QStandardItem*, unsigned>> ctx;
     ctx.push(std::make_pair(model->invisibleRootItem(), 0));
 
-    auto const insert = [&](QString label)
+    auto const _insert = [&](QString label, Qt::ItemFlags flags)
     {
         auto item = new QStandardItem(std::move(label));
+        item->setFlags(flags | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         ctx.top().first->appendRow(item);
         return item;
     };
+    auto const insert = [&](QString label)
+    {
+        return _insert(std::move(label), Qt::ItemNeverHasChildren);
+    };
     auto const push = [&](QString label, unsigned len)
     {
-        ctx.push(std::make_pair(insert(std::move(label)), len));
+        ctx.push(std::make_pair(_insert(std::move(label), Qt::NoItemFlags), len));
     };
 
     for (char const* itr = data.begin(), * end = data.end(); itr != end; ++itr)
