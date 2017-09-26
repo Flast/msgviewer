@@ -26,6 +26,60 @@
 #include <QAction>
 
 
+
+#ifndef __has_attribute
+#   define __has_attribute(...) 0
+#endif // !__has_attribute
+
+#ifndef __has_builtin
+#   define __has_builtin(...) 0
+#endif // !__has_builtin
+
+
+#if __has_attribute(__always_inline__)
+#   define forceinline inline __attribute__((__always_inline__))
+#elif defined(_MSC_VER)
+#   define forceinline __forceinline
+#else
+#   define forceinline inline
+#endif // forceinline
+
+
+inline namespace builtins
+{
+
+#if !__has_builtin(__builtin_unreachable)
+[[noreturn]] inline void __builtin_unreachable() {}
+#endif // !__builtin_unreachable
+
+
+#if !__has_builtin(__builtin_bswap16)
+forceinline std::uint16_t __builtin_bswap16(std::uint16_t x)
+{
+    return (static_cast<std::uint16_t>(                  static_cast<std::uint8_t>(x      )) << 8u)
+         | (static_cast<std::uint16_t>(                  static_cast<std::uint8_t>(x >> 8u))      );
+}
+#endif // !__builtin_bswap16
+
+#if !__has_builtin(__builtin_bswap32)
+forceinline std::uint32_t __builtin_bswap32(std::uint32_t x)
+{
+    return (static_cast<std::uint32_t>(__builtin_bswap16(static_cast<std::uint16_t>(x       ))) << 16u)
+         | (static_cast<std::uint32_t>(__builtin_bswap16(static_cast<std::uint16_t>(x >> 16u)))       );
+}
+#endif // !__builtin_bswap32
+
+#if !__has_builtin(__builtin_bswap64)
+forceinline std::uint64_t __builtin_bswap64(std::uint64_t x)
+{
+    return (static_cast<std::uint64_t>(__builtin_bswap32(static_cast<std::uint32_t>(x       ))) << 32u)
+         | (static_cast<std::uint64_t>(__builtin_bswap32(static_cast<std::uint32_t>(x >> 32u)))       );
+}
+#endif // !__builtin_bswap64
+
+} // namespace builtins
+
+
 int main(int argc, char** argv)
 {
     QApplication a(argc, argv);
@@ -75,15 +129,15 @@ void open_serialized_file(QTreeView* view)
 }
 
 
-[[gnu::always_inline]] static inline std::uint16_t loadbe16(void const* ptr)
+static forceinline std::uint16_t loadbe16(void const* ptr)
 {
     return __builtin_bswap16(*reinterpret_cast<std::uint16_t const*>(ptr));
 }
-[[gnu::always_inline]] static inline std::uint16_t loadbe32(void const* ptr)
+static forceinline std::uint16_t loadbe32(void const* ptr)
 {
     return __builtin_bswap32(*reinterpret_cast<std::uint32_t const*>(ptr));
 }
-[[gnu::always_inline]] static inline std::uint16_t loadbe64(void const* ptr)
+static forceinline std::uint16_t loadbe64(void const* ptr)
 {
     return __builtin_bswap64(*reinterpret_cast<std::uint64_t const*>(ptr));
 }
