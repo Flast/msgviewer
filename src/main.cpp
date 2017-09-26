@@ -193,7 +193,7 @@ void construct_model(QTreeView* view, QByteArray const data)
         else if (byte <= 0xbfu)
         {
             auto len = byte - 0xa0u;
-            auto str = QString::fromLatin1(itr + 1, len);
+            auto str = QString::fromUtf8(itr + 1, len);
             itr += len;
             if (len)
             {
@@ -366,7 +366,7 @@ void construct_model(QTreeView* view, QByteArray const data)
             case 0xd9:
               {
                 auto len = *reinterpret_cast<std::uint8_t const*>(itr + 1);
-                auto str = QString::fromLatin1(itr + 2, len);
+                auto str = QString::fromUtf8(itr + 2, len);
                 itr += len + 1;
                 push(QStringLiteral("str 8: length %1").arg(len), 1);
                 insert(std::move(str));
@@ -375,7 +375,7 @@ void construct_model(QTreeView* view, QByteArray const data)
             case 0xda:
               {
                 auto len = loadbe16(itr + 1);
-                auto str = QString::fromLatin1(itr + 2, len);
+                auto str = QString::fromUtf8(itr + 2, len);
                 itr += len + 1;
                 push(QStringLiteral("str 16: length %1").arg(len), 1);
                 insert(std::move(str));
@@ -384,7 +384,7 @@ void construct_model(QTreeView* view, QByteArray const data)
             case 0xdb:
               {
                 auto len = loadbe32(itr + 1);
-                auto str = QString::fromLatin1(itr + 2, len);
+                auto str = QString::fromUtf8(itr + 2, len);
                 itr += len + 1;
                 push(QStringLiteral("str 32: length %1").arg(len), 1);
                 insert(std::move(str));
