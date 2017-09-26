@@ -124,6 +124,13 @@ void open_serialized_file(QTreeView* view)
         data = file.readAll();
     }
 
+    // Take previous model and release it, before constructing new model (for less memory usage).
+    if (auto m = view->model())
+    {
+        view->setModel(nullptr);
+        delete m;
+    }
+
     void construct_model(QTreeView* view, QByteArray data);
     construct_model(view, std::move(data));
 }
@@ -438,6 +445,9 @@ void construct_model(QTreeView* view, QByteArray const data)
     }
 
     // TODO: indicate insufficients
+
+    // To avoid memory leak on quitting.
+    model->setParent(view);
 
     view->setModel(model.release());
 }
