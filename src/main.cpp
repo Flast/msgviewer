@@ -29,6 +29,13 @@
 
 
 
+#ifdef __GNUC__
+#   define COMPILER_GNUC_VERSION (((__GNUC__ * 100) + __GNUC_MINOR__) * 100 + __GNUC_PATCHLEVEL__)
+#else
+#   define COMPILER_GNUC_VERSION 0
+#endif
+
+
 #ifndef __has_attribute
 #   define __has_attribute(...) 0
 #endif // !__has_attribute
@@ -50,12 +57,12 @@
 inline namespace builtins
 {
 
-#if !__has_builtin(__builtin_unreachable)
+#if !(__has_builtin(__builtin_unreachable) || (40500 <= COMPILER_GNUC_VERSION))
 [[noreturn]] inline void __builtin_unreachable() {}
 #endif // !__builtin_unreachable
 
 
-#if !__has_builtin(__builtin_bswap16)
+#if !(__has_builtin(__builtin_bswap16) || (40800 <= COMPILER_GNUC_VERSION))
 forceinline std::uint16_t __builtin_bswap16(std::uint16_t x)
 {
     return (static_cast<std::uint16_t>(                  static_cast<std::uint8_t>(x      )) << 8u)
@@ -63,7 +70,7 @@ forceinline std::uint16_t __builtin_bswap16(std::uint16_t x)
 }
 #endif // !__builtin_bswap16
 
-#if !__has_builtin(__builtin_bswap32)
+#if !(__has_builtin(__builtin_bswap32) || (40300 <= COMPILER_GNUC_VERSION))
 forceinline std::uint32_t __builtin_bswap32(std::uint32_t x)
 {
     return (static_cast<std::uint32_t>(__builtin_bswap16(static_cast<std::uint16_t>(x       ))) << 16u)
@@ -71,7 +78,7 @@ forceinline std::uint32_t __builtin_bswap32(std::uint32_t x)
 }
 #endif // !__builtin_bswap32
 
-#if !__has_builtin(__builtin_bswap64)
+#if !(__has_builtin(__builtin_bswap64) || (40300 <= COMPILER_GNUC_VERSION))
 forceinline std::uint64_t __builtin_bswap64(std::uint64_t x)
 {
     return (static_cast<std::uint64_t>(__builtin_bswap32(static_cast<std::uint32_t>(x       ))) << 32u)
