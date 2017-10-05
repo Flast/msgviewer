@@ -299,7 +299,7 @@ void construct_model(QTreeView* view, QByteArray const data)
               {
                 auto len = *reinterpret_cast<std::uint8_t const*>(itr + 1);
                 auto type = *reinterpret_cast<std::int8_t const*>(itr + 2);
-                itr += len + 1;
+                itr += len + 2;
                 insert(QStringLiteral("ext 8: type %1 length %2").arg(type).arg(len), offset);
               }
               break;
@@ -307,7 +307,7 @@ void construct_model(QTreeView* view, QByteArray const data)
               {
                 auto len = loadbe16(itr + 1);
                 auto type = *reinterpret_cast<std::int8_t const*>(itr + 3);
-                itr += len + 1;
+                itr += len + 3;
                 insert(QStringLiteral("ext 16: type %1 length %2").arg(type).arg(len), offset);
               }
               break;
@@ -315,7 +315,7 @@ void construct_model(QTreeView* view, QByteArray const data)
               {
                 auto len = loadbe32(itr + 1);
                 auto type = *reinterpret_cast<std::int8_t const*>(itr + 5);
-                itr += len + 1;
+                itr += len + 5;
                 insert(QStringLiteral("ext 32: type %1 length %2").arg(type).arg(len), offset);
               }
               break;
