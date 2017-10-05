@@ -165,11 +165,11 @@ static forceinline std::uint16_t loadbe16(void const* ptr)
 {
     return __builtin_bswap16(*reinterpret_cast<std::uint16_t const*>(ptr));
 }
-static forceinline std::uint16_t loadbe32(void const* ptr)
+static forceinline std::uint32_t loadbe32(void const* ptr)
 {
     return __builtin_bswap32(*reinterpret_cast<std::uint32_t const*>(ptr));
 }
-static forceinline std::uint16_t loadbe64(void const* ptr)
+static forceinline std::uint64_t loadbe64(void const* ptr)
 {
     return __builtin_bswap64(*reinterpret_cast<std::uint64_t const*>(ptr));
 }
