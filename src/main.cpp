@@ -54,11 +54,20 @@
 #endif // forceinline
 
 
+#if __has_attribute(noreturn)
+#   define noreturn [[noreturn]]
+#elif defined(_MSC_VER)
+#   define noreturn __declspec(noreturn)
+#else
+#   define noreturn
+#endif
+
+
 inline namespace builtins
 {
 
 #if !(__has_builtin(__builtin_unreachable) || (40500 <= COMPILER_GNUC_VERSION))
-[[noreturn]] inline void __builtin_unreachable() {}
+noreturn inline void __builtin_unreachable() {}
 #endif // !__builtin_unreachable
 
 
