@@ -17,7 +17,7 @@ elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
 endif()
 
 
-add_executable(msgviewer
+add_executable(msgviewer WIN32
   src/main.cpp
 )
 
